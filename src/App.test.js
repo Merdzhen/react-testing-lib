@@ -1,12 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
+import userEvent from "@testing-library/user-event";
 
 describe('test app', () => {
-  test('renders learn react link', () => {
+  test('existing elements', () => {
     render(<App />);
     const titleElement = screen.getByText(/main title/i);
     const btn = screen.getByRole('button');
-    const input = screen.getByPlaceholderText(/input value/i)
+    const input = screen.getByPlaceholderText(/input value/i);
     expect(titleElement).toBeInTheDocument();
     expect(btn).toBeInTheDocument();
     expect(input).toBeInTheDocument();
@@ -17,7 +18,7 @@ describe('test app', () => {
   test('non-existent element', async() => {
     render(<App />);
     const helloElement = screen.queryByText(/hello/i);
-    expect(helloElement).toBeNull();
+    expect(helloElement).toBeNull(); // элемента нет на странице
   });
 
   test('async', async() => {
@@ -27,6 +28,30 @@ describe('test app', () => {
     expect(helloElement).toBeInTheDocument();
     expect(helloElement).toHaveStyle({color: 'red', width: '100%'});
     // screen.debug();
+  });
+
+  test('click event', async() => {
+    render(<App />);
+    const btn = screen.getByTestId('toggle-btn');
+    expect(screen.queryByTestId('toggle-elem')).toBeNull(); // сначала элемента нет на странице
+    fireEvent.click(btn);
+    expect(screen.queryByTestId('toggle-elem')).toBeInTheDocument(); // после клика появляется
+    fireEvent.click(btn);
+    expect(screen.queryByTestId('toggle-elem')).toBeNull(); // после второго клика снова пропадает
+  });
+
+  test('change event', async() => {
+    render(<App />);
+    const input = screen.getByPlaceholderText(/input value/i);
+    expect(screen.queryByTestId('value-elem')).toContainHTML('');
+    // fireEvent - искусственное конкретное событие
+    fireEvent.input(input, {
+      target: {value: 'test-value'}
+    });
+
+    // ! userEvent - воспроизводит действия пользователя
+    // userEvent.type(input, 'test-value');
+    expect(screen.queryByTestId('value-elem')).toContainHTML('test-value');
   });
 })
 

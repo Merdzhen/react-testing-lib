@@ -6,3 +6,17 @@ exports[`renders learn react link 1`] = `
   type="text"
 />
 `;
+
+exports[`test app existing elements 1`] = `
+<input
+  placeholder="input value"
+  type="text"
+/>
+`;
+
+exports[`test app renders learn react link 1`] = `
+<input
+  placeholder="input value"
+  type="text"
+/>
+`;
