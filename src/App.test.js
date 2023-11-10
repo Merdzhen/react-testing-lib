@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import App from './App';
 import userEvent from "@testing-library/user-event";
+import {act} from "react-dom/test-utils";
+import App from './App';
 
 describe('test app', () => {
   test('existing elements', () => {
@@ -45,12 +46,15 @@ describe('test app', () => {
     const input = screen.getByPlaceholderText(/input value/i);
     expect(screen.queryByTestId('value-elem')).toContainHTML('');
     // fireEvent - искусственное конкретное событие
-    fireEvent.input(input, {
-      target: {value: 'test-value'}
-    });
+    // fireEvent.input(input, {
+    //   target: {value: 'test-value'}
+    // });
 
     // ! userEvent - воспроизводит действия пользователя
-    // userEvent.type(input, 'test-value');
+    // userEvent.type(input, 'test-value'); - так появляется warning
+    await act(async() => {
+      await userEvent.type(input, 'test-value');
+    })
     expect(screen.queryByTestId('value-elem')).toContainHTML('test-value');
   });
 })
