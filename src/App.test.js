@@ -16,7 +16,7 @@ describe('test app', () => {
     expect(input).toMatchSnapshot();
   });
 
-  test('non-existent element', async() => {
+  test('non-existent element', () => {
     render(<App />);
     const helloElement = screen.queryByText(/hello/i);
     expect(helloElement).toBeNull(); // элемента нет на странице
@@ -31,7 +31,7 @@ describe('test app', () => {
     // screen.debug();
   });
 
-  test('click event', async() => {
+  test('click event', () => {
     render(<App />);
     const btn = screen.getByTestId('toggle-btn');
     expect(screen.queryByTestId('toggle-elem')).toBeNull(); // сначала элемента нет на странице
